@@ -7,6 +7,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/Character.h"
+#include "FPSProjectile.h"
 #include "FPSCharacter.generated.h"
 
 UCLASS()
@@ -22,6 +23,10 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	// Projectile class to spawn
+	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
+	TSubclassOf<class AFPSProjectile> ProjectileClass;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -29,19 +34,19 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-	//Handle input for moving forward and backward.
+	// Handle input for moving forward and backward.
 	UFUNCTION()
 	void MoveForward(float Value);
 
-	//Handle input moving right and left
+	// Handle input moving right and left
 	UFUNCTION()
 	void MoveRight(float Value);
 
-	//Set jump flag when key is pressed.
+	// Set jump flag when key is pressed.
 	UFUNCTION()
 	void StartJump();
 
-	//Clear jump flag when key is released.
+	// Clear jump flag when key is released.
 	UFUNCTION()
 	void StopJump();
 
@@ -49,7 +54,15 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	UCameraComponent* FPSCameraComponent;
 
-	//First-Person mesh (arms), visible only to the owning player
+	// First-Person mesh (arms), visible only to the owning player
 	UPROPERTY(VisibleDefaultsOnly, Category="Mesh")
 	USkeletalMeshComponent* FPSMesh;
+
+	// Function that Handles Firing Projectiles
+	UFUNCTION()
+	void Fire();
+
+	// Gun muzzle offset from the camera location.
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Gameplay")
+	FVector MuzzleOffset;
 };
